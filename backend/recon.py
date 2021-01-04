@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, Response
 from flask_login import LoginManager
 from faker import Faker
-from user import User
+
 from database import Database
 import json
 
@@ -35,12 +35,12 @@ def signup():
 
 @app.route('/budget', methods=['GET', 'POST'])
 def budget_page():
-    return NotImplemented
+    return "<h1>moshi moshi</h1>"
 
 
 @app.route('/networth', methods=['GET', 'POST'])
-def budget_page():
-    return NotImplemented
+def networth_page():
+    return "<h1>moshi moshi</h1>"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

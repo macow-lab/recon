@@ -1,0 +1,33 @@
+version: "3.5"
+services:
+    # frontend:
+    #     restart: on-failure
+    #     networks:
+    #         - frontend-backend
+
+    backend:
+        build: ./backend
+        ports: 
+            - "5000:5000"
+        restart: on-failure
+        depends_on:
+            - database
+        networks:
+            - backend-database
+
+    database:
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: pass
+        volumes:
+            - ./database:/docker-entrypoint-initdb.d/:ro
+        networks:
+            - backend-database
+
+networks:
+    frontend-backend:
+    backend-database: 
+
+ 

@@ -1,7 +1,8 @@
+import logging
 from flask import Flask, request, render_template, Response
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required, login_user
 from faker import Faker
-
+from user import User
 from database import Database
 import json
 
@@ -20,25 +21,34 @@ def load_user(user_id):
 def home():
     return "<h1>moshi moshi</h1>"
 
-@app.route("/signup", methods=["POST"])
+@app.route("/signup", methods=["POST", "GET"])
 def signup():
-    # username VARCHAR(255) UNIQUE NOT NULL,
-	# password VARCHAR(30) NOT NULL,
-	# email VARCHAR(255) UNIQUE NOT NULL,
-    newUser = {
-        "username": request.form["username"],
-        "password": request.form["password"],
-        "email": request.form["email"]
-    }
-    
-    return "<h1>moshi moshi " + newUser["username"] + " </h1>"
+    if request.method == "POST":
+        userDic = {
+            "username": request.form["username"],
+            "password": request.form["password"],
+            "email": request.form["email"]
+        }
+        newUser = User(userDic["username"], userDic["password"], userDic["email"])
+        newUser = newUser.createUser(newUser)
+        if newUser["Status"] == True:
+            return ('User created successfully.', 201)
+        else:
+            app.logger.error(newUser["Error"])
+            return ('Failed to create', 409)
+    else:
+        return  """
+                Hello {}! Welcome to Recon :)  
+                """.format("Mr Jojo")
 
 @app.route('/budget', methods=['GET', 'POST'])
+# @login_required
 def budget_page():
     return "<h1>moshi moshi</h1>"
 
 
 @app.route('/networth', methods=['GET', 'POST'])
+# @login_required
 def networth_page():
     return "<h1>moshi moshi</h1>"
 

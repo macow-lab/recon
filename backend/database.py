@@ -33,22 +33,35 @@ class Database:
         return connector.cursor(dictionary=True)
     
 
-    def insert(self, dicObj):
+    def insert(self, User):
         # Example for insert in database
         dbConnector = self.__getConnector()
         cursor = self.__getCursor()
-        cursor.execute(
-            """
-                INSERT INTO __table (
-                    name
-                ) VALUES ('{}');
-            """.format(
-                dicObj["name"]
+        try:
+            cursor.execute(
+                """
+                    INSERT INTO user (
+                        username,
+                        password,
+                        email
+                    ) VALUES ('{}', '{}', '{}');
+                """.format(
+                    User.username,
+                    User.password,
+                    User.email
+                )
             )
-        )
-        self.__dbConnector.commit()
+            self.__dbConnector.commit()
+            return True
+        except mysql.connector.IntegrityError as err:
+            rejectedInsert = {
+                "Error": err,
+                "Status": False
+            }
+            return rejectedInsert
+            
 
-    def get_persons(self):
+    def get_users(self):
         # Example for select
         dbConnector = self.__getConnector()
         cursor = self.__getCursor()

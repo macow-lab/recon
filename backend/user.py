@@ -1,6 +1,12 @@
 from database import Database
 
 class User:
-    # dbConnector is the attribute that allows connection to the database
-    def __init__(self):
-        self.__username = None
+    database = Database()
+    
+    def __init__(self, username, password, email):
+        self.username = username
+        self.__password = password
+        self.__email = email
+        
+    def createUser(self):
+        return database.insert(self)

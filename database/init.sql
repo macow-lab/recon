@@ -13,15 +13,21 @@ CREATE TABLE user (
 
 CREATE TABLE budget (
 	budget_id int,
-	income FLOAT(10,2),
-	expense FLOAT(10,2),
-	saving FLOAT(10,2),
-	category VARCHAR(255),
+	incomes MONEY,
+	expense MONEY,
+	savings MONEY,
+	categories VARCHAR(255),
 	FOREIGN KEY(budget_id) REFERENCES user (user_id)
 );
 
 CREATE TABLE networth (
 	networth_id int,
-	date DATE NOT NULL,
-	FOREIGN KEY(budget_id) REFERENCES user (user_id)
+	stamp DATE NOT NULL,
+	asset_type ENUM ('Asset', 'Passive'),
+	categories VARCHAR(255),
+	FOREIGN KEY(networth_id) REFERENCES user (user_id)
 );
+
+-- Dummy data
+INSERT INTO user (username, password, email) VALUES ('admin', 'pass', 'admin@recon.com');
+INSERT INTO user (username, password, email) VALUES ('JosephKujoh', 'pass', 'admin@recon.com');

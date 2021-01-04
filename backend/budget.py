@@ -1,5 +1,8 @@
 from database import Database
 
-income = {
+class budget:
+
     
-}
+    def __init__(self):
+        self.__incomes = None
+        self.__expenses = None

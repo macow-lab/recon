@@ -5,10 +5,10 @@ from faker import Faker
 from user import User
 from database import Database
 import json
+import re
 
 app = Flask(__name__)
 
-fake = Faker()
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -29,14 +29,20 @@ def signup():
             "password": request.form["password"],
             "email": request.form["email"]
         }
+        # Validation of Email address
+        if not re.match(r"[^@]+@[^@]+\.[^@]+.", userDic["email"]):
+            return ('Invalid email address', 400)
+        
+        # Creating user object and commiting to database if possible
         newUser = User(userDic["username"], userDic["password"], userDic["email"])
         newUser = newUser.createUser(newUser)
+        
         if newUser["Status"] == True:
             return ('User created successfully.', 201)
         else:
             app.logger.error(newUser["Error"])
             return ('Failed to create', 409)
-    else:
+    else: # Handling GET
         return  """
                 Hello {}! Welcome to Recon :)  
                 """.format("Mr Jojo")

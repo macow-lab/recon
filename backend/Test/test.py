@@ -31,6 +31,14 @@ if mode == modes["post-signup"]:
 
     response = requests.request(
         "POST", url, headers=headers, data=payload)
+    
+    print("Second test with duplicate email and username")
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request(
+        "POST", url, headers=headers, data=payload)
 
     print(response.text)
 elif mode == modes["get-budget"]:

@@ -28,37 +28,43 @@ class Database:
             self.__connect()
         return self.__dbConnector
 
-    def __getCursor(self):
+    def __getPreparedCursor(self):
+        connector = self.__getConnector()
+        return connector.cursor(prepared = True)
+    
+    def __getDictionaryCursor(self):
         connector = self.__getConnector()
         return connector.cursor(dictionary=True)
     
 
-    def insert(self, User):
+    def insert(self, username, password, email):
         # Example for insert in database
         dbConnector = self.__getConnector()
-        cursor = self.__getCursor()
+        cursor = self.__getPreparedCursor()
         try:
-            cursor.execute(
-                """
-                    INSERT INTO user (
-                        username,
-                        password,
-                        email
-                    ) VALUES ('{}', '{}', '{}');
-                """.format(
-                    User.username,
-                    User.password,
-                    User.email
-                )
-            )
+            insertQuery = """
+                            INSERT INTO user (
+                                username,
+                                password,
+                                email
+                            ) VALUES (%s, %s, %s);
+                        """
+                        
+            insertTuple = (username, password, email)
+            cursor.execute(insertQuery, insertTuple)
+            
             self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
             rejectedInsert = {
                 "Error": err,
-                "Status": False
+                "Status": "Fail"
             }
             return rejectedInsert
+        finally:
+            if dbConnector.is_connected:
+                cursor.close()
+                dbConnector.close()
             
 
     def get_users(self):

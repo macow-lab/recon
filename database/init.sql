@@ -8,7 +8,7 @@ CREATE TABLE user (
 	user_id serial primary key,
 	username VARCHAR(255) UNIQUE NOT NULL,
 	password VARCHAR(30) NOT NULL,
-	email VARCHAR(255) UNIQUE NOT NULL,
+	email VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE budget (

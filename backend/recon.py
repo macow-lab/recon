@@ -19,41 +19,50 @@ def load_user(user_id):
 
 @app.route("/", methods=["GET"])
 def home():
-    return "<h1>moshi moshi</h1>"
+    return render_template("base.html")
 
-@app.route("/signup", methods=["POST", "GET"])
-def signup():
+@app.route("/auth/register", methods=["GET", "POST"])
+def register():
     if request.method == "POST":
         userDic = {
             "username": request.form["username"],
             "password": request.form["password"],
             "email": request.form["email"]
         }
-        # Validation of Email address
+        # Validation of Email address and username
         if not re.match(r"[^@]+@[^@]+\.[^@]+.", userDic["email"]):
             return ('Invalid email address', 400)
+        elif not re.match(r"^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$", userDic["username"]):
+            return ('Invalid username', 400)
         
         # Creating user object and commiting to database if possible
         newUser = User(userDic["username"], userDic["password"], userDic["email"])
-        newUser = newUser.createUser(newUser)
+        statusDic = newUser.createUser()
         
-        if newUser["Status"] == True:
+        if statusDic["Status"] == "Fail":
             return ('User created successfully.', 201)
         else:
-            app.logger.error(newUser["Error"])
+            app.logger.error(statusDic["Error"])
             return ('Failed to create', 409)
     else: # Handling GET
-        return  """
-                Hello {}! Welcome to Recon :)  
-                """.format("Mr Jojo")
+        return render_template("auth/register.html")
 
-@app.route('/budget', methods=['GET', 'POST'])
+@app.route("/auth/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        return "Placeholder"
+    elif request.method == "GET":
+        return render_template("auth/login.html")
+
+
+
+@app.route('/dash/budget', methods=['GET', 'POST'])
 # @login_required
 def budget_page():
     return "<h1>moshi moshi</h1>"
 
 
-@app.route('/networth', methods=['GET', 'POST'])
+@app.route('/dash/networth', methods=['GET', 'POST'])
 # @login_required
 def networth_page():
     return "<h1>moshi moshi</h1>"

@@ -5,13 +5,12 @@
 {% endblock %}
 
 {% block content %}
+<h1>Sign up</h1>
   <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="email">Email</label>
-    <input name="email" id="email" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
+    <p>
+      {{form.username.label}} <br>
+      {{orm.username(size=30)}}
+    </p>
+    
   </form>
 {% endblock %}

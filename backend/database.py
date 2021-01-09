@@ -58,7 +58,7 @@ class Database:
         except mysql.connector.IntegrityError as err:
             rejectedInsert = {
                 "Error": err,
-                "Status": "Fail"
+                "Status": False
             }
             return rejectedInsert
         finally:

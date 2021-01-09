@@ -12,6 +12,8 @@ app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+app.config['SECRET_KEY'] = 'Secret101'
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -39,7 +41,7 @@ def register():
         newUser = User(userDic["username"], userDic["password"], userDic["email"])
         statusDic = newUser.createUser()
         
-        if statusDic["Status"] == "Fail":
+        if statusDic["Status"]:
             return ('User created successfully.', 201)
         else:
             app.logger.error(statusDic["Error"])

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h1>Sign up</h1>
+  <form method="post">
+    <p>
+      {{form.username.label}} <br>
+      {{orm.username(size=30)}}
+    </p>
+    
+  </form>
+{% endblock %}

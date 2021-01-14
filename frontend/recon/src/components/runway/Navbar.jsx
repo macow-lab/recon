@@ -51,7 +51,7 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
-        <Route path="/" component={Main} />
+        <Route exact path="/" component={Main} />
         <Route path="/about" component={About} />
         <Route exact path="/contact" component={Contact} />
       </BrowserRouter>

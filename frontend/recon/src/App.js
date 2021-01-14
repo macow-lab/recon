@@ -13,7 +13,7 @@ function App() {
   document.title = "recon";
   return (
     <div>
-      <MainPage></MainPage>
+      <MainPage/>
     </div>
   );
 }

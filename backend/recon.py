@@ -34,7 +34,7 @@ def register():
         # Validation of Email address and username
         if not re.match(r"[^@]+@[^@]+\.[^@]+.", userDic["email"]):
             return ('Invalid email address', 400)
-        elif not re.match(r"^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$", userDic["username"]):
+        elif not re.match(r"^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$", userDic["username"]):
             return ('Invalid username', 400)
         
         # Creating user object and commiting to database if possible

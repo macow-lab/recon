@@ -1,5 +1,3 @@
-from database import Database
-
 class budget:
     
     def __init__(self):
@@ -11,15 +9,17 @@ class budget:
     def getIncomes(self):
         return self.__incomes
     
-    def setIncomes(self, incomes: dict):
-        self.__incomes = incomes
+    def addIncomes(self, incomes: dict):
+        for key, value in incomes.items():
+            self.__incomes[key] = value
         return self.__incomes
 
     def getExpenses(self):
         return self.__expenses
     
-    def setExpenses(self, expenses: dict):
-        self.__expenses = expenses
+    def addExpenses(self, expenses: dict):
+        for key, value in expenses.items():
+            self.__expenses[key] = value
         return self.__expenses  
 
     def getSavings(self):
@@ -36,7 +36,15 @@ class budget:
         self.__invested = invested
         return self.__invested
     
-    def updateBudget(self, budget: dict):
+    def updateIncomeExpenses(self, budget: dict):
+        self.__expenses = {}
+        self.__incomes = {}
+        
         for key, value in budget.items():
-            if value < 0: 
-                return "how"
+            if isinstance(value, (int, float, complex)):
+                print("Value for ", key, " is not a number.")
+            elif value < 0: 
+                self.__expenses[key] = value
+            elif value > 0:
+                self.__incomes[key] = value
+        return True

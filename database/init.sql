@@ -12,12 +12,12 @@ CREATE TABLE user (
 );
 
 CREATE TABLE budget (
-	budget_id int,
+	budget_id VARCHAR(255) NOT NULL,
 	incomes MONEY,
 	expense MONEY,
 	savings MONEY,
-	categories VARCHAR(255),
-	FOREIGN KEY(budget_id) REFERENCES user (user_id)
+	investments MONEY,
+	FOREIGN KEY(budget_id) REFERENCES user (username)
 );
 
 CREATE TABLE networth (
@@ -25,7 +25,7 @@ CREATE TABLE networth (
 	stamp DATE NOT NULL,
 	asset_type ENUM ('Asset', 'Passive'),
 	categories VARCHAR(255),
-	FOREIGN KEY(networth_id) REFERENCES user (user_id)
+	FOREIGN KEY(networth_id) REFERENCES user (username)
 );
 
 -- Dummy data

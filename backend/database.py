@@ -68,23 +68,28 @@ class Database:
                 dbConnector.close()
             
 
-    def createBudget(self, budget: dict, username: str):
+    def updateIncomeExpenses(self, budget: dict, username: str):
         # Example for insert in database
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
         try:
-            insertQuery = """
-                            INSERT INTO user (
-                                username,
-                                password,
-                                email
-                            ) VALUES (%s, %s, %s);
-                        """
-                        
-            insertTuple = (username, password, email)
-            cursor.execute(insertQuery, insertTuple)
-            
-            self.__dbConnector.commit()
+            for key, value in budget.items():
+                if value > 0:
+                    type = "incomes"
+                else:
+                    type = "expenses"
+                    
+                updateQuery = """
+                                REPLACE into budget (
+                                    username,
+                                    {type}
+                                ) VALUES (%s);
+                            """.format(type)
+                            
+                insertTuple = (username, value)
+                cursor.execute(updateQuery, insertTuple)
+                
+                self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
             rejectedInsert = {

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link, BrowserRouter, Route } from "react-router-dom";
+import { Link, BrowserRouter, Route, Switch } from "react-router-dom";
 
-import About from "../../About.js";
-import Contact from "../../Contact.js";
-import Main from "../../Main.js";
+import About from "../../pages/runway/About.js";
+import Contact from "../../pages/runway/Contact.jsx";
+import Main from "../../pages/runway/Main.js";
+import SignIn from "../auth/InForm.jsx";
 
 import "../../sass/mystyles.scss";
 
@@ -16,7 +17,7 @@ export default function Navbar() {
         <nav className="navbar" role="navigation" aria-label="main navigation">
           <div className="navbar-brand">
             <a href="/" className="navbar-item">
-              <h1>recon</h1>
+              <h1 class="title is-3">recon</h1>
             </a>
 
             <a
@@ -48,12 +49,32 @@ export default function Navbar() {
               <Link to="/contact" className="navbar-item" id="link">
                 <h1 id="icon-text">Contact</h1>
               </Link>
+              <Link to="/auth/login" className="navbar-item" id="link">
+                <button class="button is-ghost">
+                  <span class="icon is-small">
+                    <i class="fas fa-sign-in-alt"></i>
+                  </span>
+                  <span>Log in</span>
+                </button>
+              </Link>
+              <Link to="/auth/register" className="navbar-item" id="link">
+                <button class="button is-ghost">
+                  <span class="icon is-small">
+                    <i class="fas fa-user-plus"></i>
+                  </span>
+                  <span>Sign up</span>
+                </button>
+              </Link>
             </div>
           </div>
         </nav>
-        <Route exact path="/" component={Main} />
+        <Switch>
+        
         <Route path="/about" component={About} />
-        <Route exact path="/contact" component={Contact} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/auth/login" component={SignIn} />
+        <Route exact strict path="/" component={Main} />
+        </Switch>
       </BrowserRouter>
     </div>
   );

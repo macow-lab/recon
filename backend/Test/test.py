@@ -47,7 +47,20 @@ elif mode == modes["get-budget"]:
     pass
 elif mode == modes["post-budget"]:
     print("Selected Test: {}".format(modes["post-budget"]))
-    url = baseurl + "/budget"
+    url = baseurl + "/dash/Sukuna/budget"
+
+
+    payload = {
+            'CashApp': 5000,
+            'Netflix': -200,
+            }
+    
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request(
+        "POST", url, headers=headers, data=payload)
     pass
 elif mode == modes["get-networth"]:
     print("Selected Test: {}".format(modes["get-networth"]))

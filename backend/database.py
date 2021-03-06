@@ -82,14 +82,15 @@ class Database:
                 updateQuery = """
                                 REPLACE into budget (
                                     username,
-                                    {type}
-                                ) VALUES (%s);
-                            """.format(type)
+                                    '{}',
+                                    categories
+                                ) VALUES ('{}', '{}', '{}');
+                            """.format(type, username, value, key)
                             
                 insertTuple = (username, value)
                 cursor.execute(updateQuery, insertTuple)
                 
-                self.__dbConnector.commit()
+            self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
             rejectedInsert = {

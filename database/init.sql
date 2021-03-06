@@ -12,11 +12,12 @@ CREATE TABLE user (
 );
 
 CREATE TABLE budget (
-	budget_id VARCHAR(255) NOT NULL,
+	budget_id VARCHAR(255),
 	incomes MONEY,
 	expense MONEY,
 	savings MONEY,
 	investments MONEY,
+	categories VARCHAR(255),
 	FOREIGN KEY(budget_id) REFERENCES user (username)
 );
 

@@ -58,15 +58,15 @@ def login():
 
 
 
-@app.route('/dash/budget', methods=['GET', 'POST'])
+@app.route('/dash/<username>/budget', methods=['GET', 'POST'])
 # @login_required
-def budget_page():
+def budget_page(username):
     return "<h1>moshi moshi</h1>"
 
 
-@app.route('/dash/networth', methods=['GET', 'POST'])
+@app.route('/dash/<username>/networth', methods=['GET', 'POST'])
 # @login_required
-def networth_page():
+def networth_page(username):
     return "<h1>moshi moshi</h1>"
 
 if __name__ == "__main__":

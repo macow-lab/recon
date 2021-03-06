@@ -29,5 +29,4 @@ CREATE TABLE networth (
 );
 
 -- Dummy data
-INSERT INTO user (username, password, email) VALUES ('admin', 'pass', 'admin@recon.com');
-INSERT INTO user (username, password, email) VALUES ('JosephKujoh', 'pass', 'admin@recon.com');
+INSERT INTO user (username, password, email) VALUES ('Sukuna', 'pass', 'admin@recon.com');

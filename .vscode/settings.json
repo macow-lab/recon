@@ -1,4 +1,7 @@
 {
     "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.8/bin/python3",
-    "python.autoComplete.extraPaths": ["backend"]
+    "python.autoComplete.extraPaths": [
+        "backend"
+    ],
+    "python.linting.enabled": true
 }

@@ -103,7 +103,6 @@ class Database:
                 dbConnector.close()
 
     def getUsers(self):
-        # Example for select
         dbConnector = self.__getConnector()
         cursor = self.__getCursor()
 

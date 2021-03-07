@@ -64,8 +64,16 @@ def login():
 # @login_required
 def budget_page(username):
     # TODO: Fix så username-param opretter User objekt, og erstatter den oprettede 'user'
+    
     # TODO: Opsæt if statement så POST bliver ordnet
-    return user.updateIncomeExpenses()
+    if request.method == "POST":
+        payload = request.get_json()
+        # TODO: FOR LOOP PÅ PAYLOAD OG LAVER DICT BASERET PÅ JSON KEYS
+        user.updateIncomeExpenses(request.form.to_dict(flat=False))
+        return ('Created', 200)
+    # TODO TAGER IK IMOD PARAMETER
+    elif request.method == "GET":
+        return "Hey"
 
 
 @app.route('/dash/<username>/networth', methods=['GET', 'POST'])

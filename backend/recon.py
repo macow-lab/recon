@@ -14,6 +14,8 @@ login_manager.init_app(app)
 
 app.config['SECRET_KEY'] = 'Secret101'
 
+user = User("Sukuna", "pass", "admin@recon.com")
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -61,7 +63,9 @@ def login():
 @app.route('/dash/<username>/budget', methods=['GET', 'POST'])
 # @login_required
 def budget_page(username):
-    return "<h1>moshi moshi</h1>"
+    # TODO: Fix så username-param opretter User objekt, og erstatter den oprettede 'user'
+    # TODO: Opsæt if statement så POST bliver ordnet
+    return user.updateIncomeExpenses()
 
 
 @app.route('/dash/<username>/networth', methods=['GET', 'POST'])

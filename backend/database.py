@@ -30,30 +30,30 @@ class Database:
 
     def __getPreparedCursor(self):
         connector = self.__getConnector()
-        return connector.cursor(prepared = True)
-    
+        return connector.cursor(prepared=True)
+
     def __getDictionaryCursor(self):
         connector = self.__getConnector()
         return connector.cursor(dictionary=True)
 
-## CRUD Operations
+# CRUD Operations
 
     def createUser(self, username, password, email):
         # Example for insert in database
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
         try:
-            insertQuery = """
-                            INSERT INTO user (
-                                username,
-                                password,
-                                email
-                            ) VALUES (%s, %s, %s);
-                        """
-                        
+            updateQuery = f"""
+        REPLACE into budget (
+            username,
+            {type},
+            categories
+        ) VALUES (%s, %s, %s);
+    """
+
             insertTuple = (username, password, email)
-            cursor.execute(insertQuery, insertTuple)
-            
+            cursor.execute(updateQuery, insertTuple)
+
             self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
@@ -66,7 +66,6 @@ class Database:
             if dbConnector.is_connected:
                 cursor.close()
                 dbConnector.close()
-            
 
     def updateIncomeExpenses(self, budget: dict, username: str):
         # Example for insert in database
@@ -75,21 +74,21 @@ class Database:
         try:
             for key, value in budget.items():
                 if value > 0:
-                    type = "incomes"
+                    dice = "incomes"
                 else:
-                    type = "expenses"
-                    
-                updateQuery = """
-                                REPLACE into budget (
-                                    username,
-                                    '{}',
-                                    categories
-                                ) VALUES ('{}', '{}', '{}');
-                            """.format(type, username, value, key)
-                            
-                insertTuple = (username, value)
+                    dice = "expenses"
+
+                updateQuery = f"""
+                                    REPLACE into budget (
+                                        username,
+                                        {dice},
+                                        categories
+                                    ) VALUES (%s, %s, %s);
+                                """ % (username, value, key)
+
+                insertTuple = (username, value, key)
                 cursor.execute(updateQuery, insertTuple)
-                
+
             self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
@@ -107,7 +106,7 @@ class Database:
         # Example for select
         dbConnector = self.__getConnector()
         cursor = self.__getCursor()
-        
+
         cursor.execute(
             """
             SELECT * FROM __table;
@@ -116,3 +115,7 @@ class Database:
         # Converts SQL resul to JSON
         result = json.dumps(cursor.fetchall())
         return result
+
+# TODO: Opret og returner user objekt ud fra username
+    def getUsername(self):
+        return NotImplemented

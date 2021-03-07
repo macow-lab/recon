@@ -36,6 +36,12 @@ class budget:
         self.__invested = invested
         return self.__invested
     
+    def getAll(self):
+        combined = {}
+        for key, value in zip(self.__savings.items(), self.__savings.items()):
+            combined[key] = value
+        return combined
+    
     def updateIncomeExpenses(self, budget: dict):
         self.__expenses = {}
         self.__incomes = {}

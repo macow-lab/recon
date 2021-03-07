@@ -4,6 +4,7 @@ from budget import budget
 
 database = Database()
 
+
 class User:
 
 
@@ -45,3 +46,4 @@ class User:
     def updateIncomeExpenses(self, budget: dict):
         self.budget.updateIncomeExpenses(budget)
         # update db
+        return database.updateIncomeExpenses(self.budget.getAll(), self.__username)

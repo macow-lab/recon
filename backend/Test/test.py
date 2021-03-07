@@ -12,7 +12,7 @@ modes = {
 }
 
 # Variables for testing
-mode = modes["post-signup"]
+mode = modes["post-budget"]
 baseurl = "http://localhost:5000"
 
 
@@ -24,7 +24,8 @@ if mode == modes["post-signup"]:
             'password': 'password',
             'email': '@recon.com'}
     payload["email"] = payload["username"] + payload["email"]
-    
+    print(payload)
+    print("Payload: {}".format(payload))
     headers = {
         'Content-Type': 'application/json'
     }

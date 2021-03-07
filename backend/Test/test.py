@@ -12,13 +12,13 @@ modes = {
 }
 
 # Variables for testing
-mode = modes["post-budget"]
+mode = modes["post-signup"]
 baseurl = "http://localhost:5000"
 
 
 if mode == modes["post-signup"]:
     print("Selected Test: {}".format(modes["post-signup"]))
-    url = baseurl + "/signup"
+    url = baseurl + "/auth/register"
 
     payload = {'username': fake.name().replace(" ", ""),
             'password': 'password',

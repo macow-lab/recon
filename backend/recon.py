@@ -28,16 +28,20 @@ def home():
 @app.route("/auth/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        requestData = request.get_json()
+        
         userDic = {
-            "username": request.form["username"],
-            "password": request.form["password"],
-            "email": request.form["email"]
+            "username": requestData["username"],
+            "password": requestData["password"],
+            "email": requestData["email"]
         }
         # Validation of Email address and username
         if not re.match(r"[^@]+@[^@]+\.[^@]+.", userDic["email"]):
             return ('Invalid email address', 400)
         elif not re.match(r"^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$", userDic["username"]):
             return ('Invalid username', 400)
+        
+        # TODO  Validate password
         
         # Creating user object and commiting to database if possible
         newUser = User(userDic["username"], userDic["password"], userDic["email"])

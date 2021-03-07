@@ -39,21 +39,20 @@ class Database:
 # CRUD Operations
 
     def createUser(self, username, password, email):
-        # Example for insert in database
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
         try:
-            updateQuery = f"""
-        REPLACE into budget (
-            username,
-            {type},
-            categories
-        ) VALUES (%s, %s, %s);
-    """
-
+            insertQuery = """
+                            INSERT INTO user (
+                                username,
+                                password,
+                                email
+                            ) VALUES (%s, %s, %s);
+                        """
+                        
             insertTuple = (username, password, email)
-            cursor.execute(updateQuery, insertTuple)
-
+            cursor.execute(insertQuery, insertTuple)
+            
             self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:

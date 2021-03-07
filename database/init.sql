@@ -12,7 +12,7 @@ CREATE TABLE user (
 CREATE TABLE budget (
 	id serial primary key,
 	username VARCHAR(255) NOT NULL,
-	stamp DATE NOT NULL,
+	stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
 	incomes DECIMAL(15,2),
 	expense DECIMAL(15,2),
 	savings DECIMAL(15,2),
@@ -24,11 +24,12 @@ CREATE TABLE budget (
 CREATE TABLE networth (
 	id serial primary key,
 	username VARCHAR(255) NOT NULL,
-	stamp DATE NOT NULL,
+	stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
 	asset_type ENUM('Asset', 'Passive'),
 	categories VARCHAR(255),
 	FOREIGN KEY(username) REFERENCES user (username)
 );
 
 INSERT INTO user (username, password, email) VALUES ('Sukuna', 'pass', 'admin@recon.com');
-INSERT INTO budget (budget_id, incomes, expense) VALUES ('Sukuna', 1, -1);
+INSERT INTO budget (username, incomes, expense) VALUES ('Sukuna', 1, -1);
+

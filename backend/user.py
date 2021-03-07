@@ -44,6 +44,11 @@ class User:
         return database.createUser(self.__username, self.__password, self.__email)
     
     def updateIncomeExpenses(self, budget: dict):
+        '''
+        Updates the budget instance for the user.
+            Parameter:
+            budget (dict): A dictionary of incomes and expenses.
+        '''
         self.budget.updateIncomeExpenses(budget)
         # update db
         return database.updateIncomeExpenses(self.budget.getAll(), self.__username)

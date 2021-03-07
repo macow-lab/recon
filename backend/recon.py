@@ -67,9 +67,7 @@ def budget_page(username):
     
     # TODO: Opsæt if statement så POST bliver ordnet
     if request.method == "POST":
-        payload = request.get_json()
-        # TODO: FOR LOOP PÅ PAYLOAD OG LAVER DICT BASERET PÅ JSON KEYS
-        user.updateIncomeExpenses(request.form.to_dict(flat=False))
+        user.updateIncomeExpenses(request.get_json())
         return ('Created', 200)
     # TODO TAGER IK IMOD PARAMETER
     elif request.method == "GET":

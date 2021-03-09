@@ -51,4 +51,4 @@ class User:
         '''
         self.budget.updateIncomeExpenses(budget)
         # update db
-        return database.updateIncomeExpenses(self.budget.getAll(), self.__username)
+        return database.updateIncomeExpenses(budget, self.__username)

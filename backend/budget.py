@@ -37,16 +37,16 @@ class budget:
         return self.__invested
     
     def getAll(self):
-        combined = {}
-        for key, value in zip(self.__savings.items(), self.__savings.items()):
-            combined[key] = value
+        combined = {**self.__incomes, **self.__expenses}
         return combined
     
-    def updateIncomeExpenses(self, budget: dict):
+    def updateIncomeExpenses(self, incomingUpdate: dict):
         self.__expenses = {}
         self.__incomes = {}
         
-        for key, value in budget.items():
+        for item in incomingUpdate.items():
+            key = item[0]
+            value = item[1]
             if isinstance(value, (int, float, complex)):
                 print("Value for ", key, " is not a number.")
             elif value < 0: 

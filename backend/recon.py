@@ -21,9 +21,11 @@ user = User("Sukuna", "pass", "admin@recon.com")
 def load_user(user_id):
     return User.get(user_id)
 
+
 @app.route("/", methods=["GET"])
 def home():
     return render_template("base.html")
+
 
 @app.route("/auth/register", methods=["GET", "POST"])
 def register():
@@ -45,15 +47,14 @@ def register():
         
         # Creating user object and commiting to database if possible
         newUser = User(userDic["username"], userDic["password"], userDic["email"])
-        statusDic = newUser.createUser()
         
-        if statusDic["Status"]:
+        if newUser.createUser():
             return ('User created successfully.', 201)
         else:
-            app.logger.error(statusDic["Error"])
             return ('Failed to create', 409)
     else: # Handling GET
         return render_template("auth/register.html")
+
 
 @app.route("/auth/login", methods=["GET", "POST"])
 def login():
@@ -71,11 +72,14 @@ def budget_page(username):
     
     # TODO: Opsæt if statement så POST bliver ordnet
     if request.method == "POST":
-        user.updateIncomeExpenses(request.get_json())
-        return ('Created', 200)
+        if user.updateIncomeExpenses(request.get_json()):
+            return ('Created', 200)
+        else:
+            return ('Failed to update', 400)
     # TODO TAGER IK IMOD PARAMETER
     elif request.method == "GET":
-        return "Hey"
+        
+        return "Hey {username}*4"
 
 
 @app.route('/dash/<username>/networth', methods=['GET', 'POST'])

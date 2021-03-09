@@ -38,7 +38,7 @@ class Database:
 
 # CRUD Operations
 
-    def createUser(self, username, password, email):
+    def createUser(self, username, password, email): # COMPLETE AND WORKS
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
         try:
@@ -49,18 +49,14 @@ class Database:
                                 email
                             ) VALUES (%s, %s, %s);
                         """
-                        
+
             insertTuple = (username, password, email)
             cursor.execute(insertQuery, insertTuple)
-            
+
             self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
-            rejectedInsert = {
-                "Error": err,
-                "Status": False
-            }
-            return rejectedInsert
+            return False
         finally:
             if dbConnector.is_connected:
                 cursor.close()
@@ -70,25 +66,43 @@ class Database:
         # Example for insert in database
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
+
         try:
-            for key, value in budget.items():
+            fuck["Entered-Try"] = True
+            for item in budget.items():
+                key = item[0]
+                value = item[1]
+                
                 if value > 0:
                     dice = "incomes"
                 else:
                     dice = "expenses"
-
-                updateQuery = f"""
-                                    REPLACE into budget (
-                                        username,
-                                        {dice},
-                                        categories
-                                    ) VALUES (%s, %s, %s);
-                                """ % (username, value, key)
-
-                insertTuple = (username, value, key)
-                cursor.execute(updateQuery, insertTuple)
-
-            self.__dbConnector.commit()
+                    
+                cursor.execute(
+                    """
+                    SELECT EXISTS(SELECT * FROM budget WHERE username= '{}' AND categories='{}');
+                    """.format(username, key)
+                )
+                search = cursor.fetchone()
+                
+                if search[0]:
+                    updateQuery = f"""
+                                        UPDATE budget SET {dice} = %s, categories = '%s' WHERE username = '%s' AND categories = '%s'
+                                    """.format(dice)
+                    insertTuple = (value, key, username, key)
+                    cursor.execute(updateQuery, insertTuple)
+                    self.__dbConnector.commit()
+                else:
+                    insertQuery = f"""
+                                        INSERT into budget (
+                                            username,
+                                            {dice},
+                                            categories
+                                        ) VALUES (%s, %s, %s);
+                                    """ 
+                    insertTuple = (username, value, key)
+                    cursor.execute(insertQuery, insertTuple)
+                    self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
             rejectedInsert = {
@@ -107,7 +121,7 @@ class Database:
 
         cursor.execute(
             """
-            SELECT * FROM __table;
+            SELECT * FROM user;
         """
         )
         # Converts SQL resul to JSON

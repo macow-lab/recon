@@ -38,7 +38,7 @@ class Database:
 
 # CRUD Operations
 
-    def createUser(self, username, password, email): # COMPLETE AND WORKS
+    def createUser(self, username, password, email):  # COMPLETE AND WORKS
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
         try:
@@ -62,47 +62,73 @@ class Database:
                 cursor.close()
                 dbConnector.close()
 
+    def ifCategoryExists(self, category: str, username: str):
+        dbConnector = self.__getConnector()
+        cursor = self.__getDictionaryCursor()
+
+        cursor.execute(
+            """
+                    SELECT EXISTS(SELECT * FROM budget WHERE username= '{}' AND categories='{}');
+                    """.format(username, category)
+        )
+        search = cursor.fetchone()
+        cursor.close()
+        result = search.values()
+        return result
+
     def updateIncomeExpenses(self, budget: dict, username: str):
         # Example for insert in database
         dbConnector = self.__getConnector()
         cursor = self.__getPreparedCursor()
 
-        try:
-            fuck["Entered-Try"] = True
+        try:  # Set wether expense or income, and check if key already exists.
             for item in budget.items():
                 key = item[0]
                 value = item[1]
-                
+
                 if value > 0:
                     dice = "incomes"
                 else:
                     dice = "expenses"
-                    
-                cursor.execute(
-                    """
-                    SELECT EXISTS(SELECT * FROM budget WHERE username= '{}' AND categories='{}');
-                    """.format(username, key)
-                )
-                search = cursor.fetchone()
+
+                search = self.ifCategoryExists(key, username)
+                cursor = self.__getPreparedCursor()
                 
-                if search[0]:
-                    updateQuery = f"""
-                                        UPDATE budget SET {dice} = %s, categories = '%s' WHERE username = '%s' AND categories = '%s'
-                                    """.format(dice)
-                    insertTuple = (value, key, username, key)
+                if 1 in search:
+                    updateQuery = None                   
+                    if dice == "incomes":
+                        updateQuery = """
+                                        UPDATE budget SET incomes = %s WHERE username = %s AND categories = %s
+                                    """
+                    else: 
+                        updateQuery = """
+                                        UPDATE budget SET expenses = %s WHERE username = %s AND categories = '%s
+                                    """
+
+                    insertTuple = (value, username, key)
                     cursor.execute(updateQuery, insertTuple)
-                    self.__dbConnector.commit()
                 else:
-                    insertQuery = f"""
+                    insertQuery = None
+                    if dice == "incomes":
+                        insertQuery = """
                                         INSERT into budget (
                                             username,
-                                            {dice},
+                                            incomes,
                                             categories
                                         ) VALUES (%s, %s, %s);
-                                    """ 
+                                    """
+                    else: 
+                        insertQuery = """
+                                        INSERT into budget (
+                                            username,
+                                            expenses,
+                                            categories
+                                        ) VALUES (%s, %s, %s);
+                                    """
+
                     insertTuple = (username, value, key)
                     cursor.execute(insertQuery, insertTuple)
-                    self.__dbConnector.commit()
+            self.__dbConnector.commit()
             return True
         except mysql.connector.IntegrityError as err:
             rejectedInsert = {

@@ -78,8 +78,12 @@ def budget_page(username):
             return ('Failed to update', 400)
     # TODO TAGER IK IMOD PARAMETER
     elif request.method == "GET":
-        
-        return "Hey {username}*4"
+        test = {
+            "howhow": 200,
+            "Juju": -200
+        }
+        user.updateIncomeExpenses(test)
+        return "<h1>Hey {username}</h1>"
 
 
 @app.route('/dash/<username>/networth', methods=['GET', 'POST'])

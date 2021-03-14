@@ -14,7 +14,7 @@ CREATE TABLE budget (
 	username VARCHAR(255) NOT NULL,
 	stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
 	incomes DECIMAL(15,2),
-	expense DECIMAL(15,2),
+	expenses DECIMAL(15,2),
 	savings DECIMAL(15,2),
 	investments DECIMAL(15,2),
 	categories VARCHAR(255),
@@ -31,5 +31,5 @@ CREATE TABLE networth (
 );
 
 INSERT INTO user (username, password, email) VALUES ('Sukuna', 'pass', 'admin@recon.com');
-INSERT INTO budget (username, incomes, expense) VALUES ('Sukuna', 1, -1);
+INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 1, "Juju");
 

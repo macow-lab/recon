@@ -1,13 +1,11 @@
 from database import Database
 
 
-class networth:
-
-
+class Networth:
     def __init__(self):
         self.__assets = {}
         self.__passives = {}
-        self.__networth = 0
+        self.__networth = None
 
     def getAsset(self):
         return self.__assets

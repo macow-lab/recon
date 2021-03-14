@@ -1,6 +1,6 @@
 from database import Database
-from networth import networth
-from budget import budget
+from networth import Networth
+from budget import Budget
 
 database = Database()
 
@@ -13,8 +13,8 @@ class User:
         self.__password = password
         self.__email = email
         self.__dbID = None
-        self.budget = budget()
-        self.networth = networth()
+        self.budget = Budget()
+        self.networth = Networth()
 
     # Mutators
     def setdbID(self, databaseUserId):

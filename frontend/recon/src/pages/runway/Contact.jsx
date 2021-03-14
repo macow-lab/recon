@@ -1,6 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./css/mystyles.css";
+import "../../css/mystyles.css";
 
 function Contact(props) {
   document.title = "Contact";

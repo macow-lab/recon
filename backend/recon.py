@@ -14,22 +14,28 @@ login_manager.init_app(app)
 
 app.config['SECRET_KEY'] = 'Secret101'
 
+user = User("Sukuna", "pass", "admin@recon.com")
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
 
+
 @app.route("/", methods=["GET"])
 def home():
     return render_template("base.html")
 
+
 @app.route("/auth/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        requestData = request.get_json()
+        
         userDic = {
-            "username": request.form["username"],
-            "password": request.form["password"],
-            "email": request.form["email"]
+            "username": requestData["username"],
+            "password": requestData["password"],
+            "email": requestData["email"]
         }
         # Validation of Email address and username
         if not re.match(r"[^@]+@[^@]+\.[^@]+.", userDic["email"]):
@@ -37,17 +43,18 @@ def register():
         elif not re.match(r"^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$", userDic["username"]):
             return ('Invalid username', 400)
         
+        # TODO  Validate password
+        
         # Creating user object and commiting to database if possible
         newUser = User(userDic["username"], userDic["password"], userDic["email"])
-        statusDic = newUser.createUser()
         
-        if statusDic["Status"]:
+        if newUser.createUser():
             return ('User created successfully.', 201)
         else:
-            app.logger.error(statusDic["Error"])
             return ('Failed to create', 409)
     else: # Handling GET
         return render_template("auth/register.html")
+
 
 @app.route("/auth/login", methods=["GET", "POST"])
 def login():
@@ -58,15 +65,30 @@ def login():
 
 
 
-@app.route('/dash/budget', methods=['GET', 'POST'])
+@app.route('/dash/<username>/budget', methods=['GET', 'POST'])
 # @login_required
-def budget_page():
-    return "<h1>moshi moshi</h1>"
+def budget_page(username):
+    # TODO: Fix så username-param opretter User objekt, og erstatter den oprettede 'user'
+    
+    # TODO: Opsæt if statement så POST bliver ordnet
+    if request.method == "POST":
+        if user.updateIncomeExpenses(request.get_json()):
+            return ('Created', 200)
+        else:
+            return ('Failed to update', 400)
+    # TODO TAGER IK IMOD PARAMETER
+    elif request.method == "GET":
+        test = {
+            "howhow": 200,
+            "Juju": -200
+        }
+        user.updateIncomeExpenses(test)
+        return "<h1>Hey {username}</h1>"
 
 
-@app.route('/dash/networth', methods=['GET', 'POST'])
+@app.route('/dash/<username>/networth', methods=['GET', 'POST'])
 # @login_required
-def networth_page():
+def networth_page(username):
     return "<h1>moshi moshi</h1>"
 
 if __name__ == "__main__":

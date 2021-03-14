@@ -1,5 +1,3 @@
--- Change names
-
 CREATE DATABASE recondb;
 
 use recondb;
@@ -7,27 +5,31 @@ use recondb;
 CREATE TABLE user (
 	user_id serial primary key,
 	username VARCHAR(255) UNIQUE NOT NULL,
-	password VARCHAR(30) NOT NULL,
+	password VARCHAR(50) NOT NULL,
 	email VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE budget (
-	budget_id int,
-	incomes MONEY,
-	expense MONEY,
-	savings MONEY,
+	id serial primary key,
+	username VARCHAR(255) NOT NULL,
+	stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+	incomes DECIMAL(15,2),
+	expenses DECIMAL(15,2),
+	savings DECIMAL(15,2),
+	investments DECIMAL(15,2),
 	categories VARCHAR(255),
-	FOREIGN KEY(budget_id) REFERENCES user (user_id)
+	FOREIGN KEY(username) REFERENCES user (username)
 );
 
 CREATE TABLE networth (
-	networth_id int,
-	stamp DATE NOT NULL,
-	asset_type ENUM ('Asset', 'Passive'),
+	id serial primary key,
+	username VARCHAR(255) NOT NULL,
+	stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+	asset_type ENUM('Asset', 'Passive'),
 	categories VARCHAR(255),
-	FOREIGN KEY(networth_id) REFERENCES user (user_id)
+	FOREIGN KEY(username) REFERENCES user (username)
 );
 
--- Dummy data
-INSERT INTO user (username, password, email) VALUES ('admin', 'pass', 'admin@recon.com');
-INSERT INTO user (username, password, email) VALUES ('JosephKujoh', 'pass', 'admin@recon.com');
+INSERT INTO user (username, password, email) VALUES ('Sukuna', 'pass', 'admin@recon.com');
+INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 1, "Juju");
+

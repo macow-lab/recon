@@ -70,19 +70,13 @@ def login():
 def budget_page(username):
     # TODO: Fix så username-param opretter User objekt, og erstatter den oprettede 'user'
     
-    # TODO: Opsæt if statement så POST bliver ordnet
     if request.method == "POST":
         if user.updateIncomeExpenses(request.get_json()):
             return ('Created', 200)
         else:
             return ('Failed to update', 400)
-    # TODO TAGER IK IMOD PARAMETER
+
     elif request.method == "GET":
-        test = {
-            "howhow": 200,
-            "Juju": -200
-        }
-        user.updateIncomeExpenses(test)
         return "<h1>Hey {username}</h1>"
 
 

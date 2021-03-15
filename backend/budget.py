@@ -1,3 +1,21 @@
+from flask import Flask, request, render_template, Response, Blueprint
+from flask_login import login_required, current_user
+import recon
+
+budgetBlueprint = Blueprint('budget', __name__, url_prefix='/dash', static_folder="static", template_folder="templates/dashboard/")
+
+@budgetBlueprint.route('/budget', methods=['GET', 'POST'])
+# @login_required
+def budget_page():
+    # TODO: Fix så username-param opretter User objekt, og erstatter den oprettede 'user'
+    if request.method == "POST":
+        if recon.getUser().updateIncomeExpenses(request.get_json()):
+            return ('Created', 200)
+        else:
+            return ('Failed to update', 400)
+    elif request.method == "GET":
+        return "<h1>Hey {}</h1>"
+
 class Budget:
     def __init__(self):
         self.__incomes = {}

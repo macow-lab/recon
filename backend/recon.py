@@ -14,21 +14,14 @@ app = Flask(__name__)
 
 
 app.config['SECRET_KEY'] = 'Secret101'
-user = None
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
-    
+
 app.register_blueprint(Budget)
 app.register_blueprint(Auth)
 
-def getUser():
-    return user
-
-def setUser(newuser):
-    user = newuser
-    return user
 
 @login_manager.user_loader
 def load_user(user_id):

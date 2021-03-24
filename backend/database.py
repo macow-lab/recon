@@ -75,6 +75,23 @@ class Database:
         cursor.close()
         result = search.values()
         return result
+    
+    def ifUserExists(self, username: str):
+        dbConnector = self.__getConnector()
+        cursor = self.__getDictionaryCursor()
+
+        cursor.execute(
+            """
+                    SELECT * FROM user WHERE username= '{}';
+                    """.format(username)
+        )
+        search = cursor.fetchone()
+        
+        if search == None:
+            return False
+        
+        cursor.close()
+        return search
 
     def updateIncomeExpenses(self, budget: dict, username: str):
         # Example for insert in database

@@ -3,15 +3,15 @@ from flask import Flask, request, render_template, Response
 from flask_login import login_required, current_user, LoginManager
 from flask_bootstrap import Bootstrap
 from faker import Faker
-from budget import Budget
-from auth import Auth
+from budget import budgetBP
+from auth import authBP
 from user import User
 import json
 import auth
 
 
 app = Flask(__name__)
-
+bootstrap = Bootstrap(app)
 
 app.config['SECRET_KEY'] = 'Secret101'
 
@@ -19,13 +19,14 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-app.register_blueprint(Budget)
-app.register_blueprint(Auth)
+app.register_blueprint(budgetBP)
+app.register_blueprint(authBP)
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    # Load user baseret på id
+    return User.loadUser(user_id)
 
 
 @app.route("/", methods=["GET"])
@@ -40,4 +41,4 @@ def networth_page(username):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-    Bootstrap(app)
+

@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, Response, Blueprint
 from flask_login import login_required, current_user
 
-budgetBP = Blueprint('budget', __name__, url_prefix='/dash', static_folder="static", template_folder="templates/dashboard/")
+budgetBP = Blueprint('budget', __name__, url_prefix='/dash', static_folder="static")
 
 @budgetBP.route('/budget', methods=['GET', 'POST'])
 @login_required
@@ -60,10 +60,10 @@ class Budget:
         for item in incomingUpdate.items():
             key = item[0]
             value = item[1]
-            if isinstance(value, (int, float, complex)):
+            if not isinstance(value, (int, float, complex)):
                 print("Value for ", key, " is not a number.")
             elif value < 0:
                 self.__expenses[key] = value
             elif value > 0:
                 self.__incomes[key] = value
-        return True
+        return self.getAll()

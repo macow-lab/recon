@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+<body>
+    {% for mesg in get_flashed_messages() %}
+    <h1>{{ mesg }}</h1>
+    {% endfor %}
+</body>

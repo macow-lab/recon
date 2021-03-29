@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from database import Database
 from user import User
 import re
+import json
 
 db = Database()
-authBP = Blueprint('auth', __name__, url_prefix='/auth', static_folder="static", template_folder="templates/auth/")
+authBP = Blueprint('auth', __name__, url_prefix='/auth', static_folder="static", template_folder="/auth/")
 
 @authBP.route("/register", methods=["GET", "POST"])
 def register():
@@ -26,33 +27,36 @@ def register():
         # TODO  Validate password
         
         # Creating user object and commiting to database if possible
-        newUser = User(userDic["username"], userDic["password"], userDic["email"])
+        newUser = User(username = userDic["username"], password = userDic["password"], email = userDic["email"])
         
         if newUser.createUser():
             login_user(newUser, remember = True)
-            return ('User created successfully.', 201)
+            
+            return redirect(url_for("budget.networth_page"))
         else:
             return ('Failed to create', 409)
     else: # Handling GET
-        return render_template("register.html")
+        return render_template("auth/register.html")
 
 
 @authBP.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form['username']
+        password = request.form['password']
 
         fetched = db.ifUserExists(username)
-        if not fetched or not fetched[2] == password:
-            flash("Try checking your credentials again!")
-            return redirect(url_for("auth.login"))
-        
-        newUser = User(username, password, fetched[3])
+        if not fetched.get("password") == password:
+            flash("Passwords are " + password + fetched.get("password"))
+            flash(fetched)
+            return render_template("auth/notello.html")
+        flash("User found!")
+        newUser = User(username = username,password = password, email = fetched.get("email"))
         login_user(newUser)
-        return redirect(url_for("budgetBP.budgetIndex"))
+        flash(current_user.username)
+        return render_template("auth/ello.html")
     elif request.method == "GET":
-        return render_template("login.html")
+        return render_template("auth/login.html")
 
 @authBP.route('/logout')
 @login_required

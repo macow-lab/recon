@@ -5,4 +5,4 @@ response
 Faker
 flask_login
 flask-wtf
-flask-bootstrap
+libsass

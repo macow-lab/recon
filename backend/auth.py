@@ -49,12 +49,12 @@ def login():
         if not fetched.get("password") == password:
             flash("Passwords are " + password + fetched.get("password"))
             flash(fetched)
-            return render_template("auth/notello.html")
+            return render_template("auth/login.html")
         flash("User found!")
-        newUser = User(username = username,password = password, email = fetched.get("email"))
+        newUser = User(username = username, password = password, email = fetched.get("email"))
         login_user(newUser)
-        flash(current_user.username)
-        return render_template("auth/ello.html")
+    
+        return redirect(url_for("budget.index"))
     elif request.method == "GET":
         return render_template("auth/login.html")
 

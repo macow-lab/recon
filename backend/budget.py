@@ -1,25 +1,31 @@
 from flask import Flask, request, render_template, Response, Blueprint
 from flask_login import login_required, current_user
 
-budgetBP = Blueprint('budget', __name__, url_prefix='/dash', static_folder="static")
+budgetBP = Blueprint('budget', __name__,
+                    url_prefix='/dash', static_folder="static")
 
-@budgetBP.route('/budget', methods=['GET', 'POST'])
 @login_required
-def budgetIndex():
+@budgetBP.route('/budget', methods=['GET', 'POST'])
+def index():
     if request.method == "POST":
         if 2 == 2:
             return ('Created', 200)
         else:
             return ('Failed to update', 400)
     elif request.method == "GET":
-        return "<h1>Hey {}</h1>".format(current_user.username)
+    
+
+        return render_template("dashboard/dashbase.html", segment="budget",
+                                )
+        
+
 
 class Budget:
     def __init__(self):
         self.__incomes = {}
         self.__expenses = {}
-        self.__savings = None
-        self.__invested = None
+        self.__savings = 0
+        self.__invested = 0
 
     def getIncomes(self):
         return self.__incomes

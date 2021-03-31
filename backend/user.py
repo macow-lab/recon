@@ -20,9 +20,6 @@ class User(UserMixin):
     def getUsername(self):
         return self.__username
     
-    def getUsername(self):
-        return self.__password
-    
     def setPassword(self, password):
         self.__password = password
         return self.__password
@@ -50,7 +47,7 @@ class User(UserMixin):
     
     @staticmethod
     def loadUser(self, id: int):
-        result = database.loadByID(self.__username, id)
+        result = database.loadByID(id = id)
         
         user = User(
             username=result.get('username'), password=result.get('password'), email=result.get('email')

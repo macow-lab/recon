@@ -1,9 +1,31 @@
+from flask import Flask, request, render_template, Response, Blueprint
+from flask_login import login_required, current_user
+
+budgetBP = Blueprint('budget', __name__,
+                    url_prefix='/dash', static_folder="static")
+
+@login_required
+@budgetBP.route('/budget', methods=['GET', 'POST'])
+def index():
+    if request.method == "POST":
+        if 2 == 2:
+            return ('Created', 200)
+        else:
+            return ('Failed to update', 400)
+    elif request.method == "GET":
+    
+
+        return render_template("dashboard/dashbase.html", segment="budget",
+                                )
+        
+
+
 class Budget:
     def __init__(self):
         self.__incomes = {}
         self.__expenses = {}
-        self.__savings = None
-        self.__invested = None
+        self.__savings = 0
+        self.__invested = 0
 
     def getIncomes(self):
         return self.__incomes
@@ -44,10 +66,10 @@ class Budget:
         for item in incomingUpdate.items():
             key = item[0]
             value = item[1]
-            if isinstance(value, (int, float, complex)):
+            if not isinstance(value, (int, float, complex)):
                 print("Value for ", key, " is not a number.")
             elif value < 0:
                 self.__expenses[key] = value
             elif value > 0:
                 self.__incomes[key] = value
-        return True
+        return self.getAll()

@@ -75,6 +75,23 @@ class Database:
         cursor.close()
         result = search.values()
         return result
+    
+    def ifUserExists(self, username: str):
+        dbConnector = self.__getConnector()
+        cursor = self.__getDictionaryCursor()
+
+        cursor.execute(
+            """
+                    SELECT * FROM user WHERE username= '{}';
+                    """.format(username)
+        )
+        search = cursor.fetchone()
+        
+        if search == None:
+            return False
+        
+        cursor.close()
+        return search
 
     def updateIncomeExpenses(self, budget: dict, username: str):
         # Example for insert in database
@@ -154,6 +171,21 @@ class Database:
         result = json.dumps(cursor.fetchall())
         return result
 
-# TODO: Opret og returner user objekt ud fra username
-    def getUsername(self):
-        return NotImplemented
+    def loadByID(self, id: int):
+        """ 
+        Used by login manager, to completely load a user with all related table entries.
+        """
+        dbConnector = self.__getConnector()
+        cursor = self.__getDictionaryCursor()
+
+        foundUser = cursor.execute(
+            "SELECT * FROM user WHERE id = ?", (int(id),)
+        ).fetchone()
+        
+        if not foundUser:
+            return None
+        # TODO load budget table
+        founderUser["budget"] = cursor.execute(
+            "SELECT * FROM budget WHERE username = ?", (foundUser.get("username"),)
+        ).fetchone()
+        return foundUser

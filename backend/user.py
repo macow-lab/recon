@@ -1,33 +1,24 @@
 from database import Database
 from networth import Networth
 from budget import Budget
+from flask_login import UserMixin
 
 database = Database()
 
 
-class User:
+class User(UserMixin):
 
 
     def __init__(self, username, password, email):
+        self.__id = None
         self.__username = username
         self.__password = password
         self.__email = email
-        self.__dbID = None
         self.budget = Budget()
         self.networth = Networth()
 
-    # Mutators
-    def setdbID(self, databaseUserId):
-        self.__databaseUserId = databaseUserId
-
-    def getdbID(self):
-        return self.__databaseUserId
-    
     def getUsername(self):
         return self.__username
-    
-    def getUsername(self):
-        return self.__password
     
     def setPassword(self, password):
         self.__password = password
@@ -38,6 +29,7 @@ class User:
     
     def setEmail(self, email):
         self.__email = email
+        
 
     # Main methods
     def createUser(self):
@@ -52,3 +44,19 @@ class User:
         self.budget.updateIncomeExpenses(budget)
         # update db
         return database.updateIncomeExpenses(budget, self.__username)
+    
+    @staticmethod
+    def loadUser(self, id: int):
+        result = database.loadByID(id = id)
+        
+        user = User(
+            username=result.get('username'), password=result.get('password'), email=result.get('email')
+        )
+        user.setID(result.get('id'))
+        
+        #TODO Handle rest of result, load budget ETC.
+        
+        return user
+
+    def get_id(self):
+        return self.__id

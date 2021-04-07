@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 
-{% include 'common/navbar.html' %}
+
 {% block content %}
 <div class="wrapper">
-
-    <div class="">
-  
-      <aside class="sidebar">
+{% include 'common/navbar.html' %}
+    <div class="columns">
         {% include 'common/menu.html' %}
-      </aside>
-      <main>
+      <main class="column">
       {% if 'budget' in segment %}
         {% block title %} Budget {% endblock title %}
         {% include 'dashboard/budget.html' %}
       {% endif %}
       </main>
-    </div>
+      </div>
+
   </div>
 {% endblock content %}

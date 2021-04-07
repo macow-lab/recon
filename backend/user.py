@@ -55,7 +55,7 @@ class User(UserMixin):
         user.setID(result.get('id'))
         
         #TODO Handle rest of result, load budget ETC.
-        
+        user.budget.updateIncomeExpenses(result.get('budget'))
         return user
 
     def get_id(self):

@@ -1,21 +1,34 @@
 from flask import Flask, request, render_template, Response, Blueprint
 from flask_login import login_required, current_user
+from database import Database
 
 budgetBP = Blueprint('budget', __name__,
                     url_prefix='/dash', static_folder="static")
+
+database = Database()
 
 @login_required
 @budgetBP.route('/budget', methods=['GET', 'POST'])
 def index():
     if request.method == "POST":
         if 2 == 2:
+            # GET REQUEST DATA 
+            
+            # UPDATE INCOMES EXPENSES FOR CURRENT USER
+            
+            # POST TO Database
+            
             return ('Created', 200)
         else:
             return ('Failed to update', 400)
     elif request.method == "GET":
+    # GET DATA FROM DATABASE
     
+    # LOAD DATA INTO USER OBJECT
+    
+    #PASS DATA TO TEMPLATE
 
-        return render_template("dashboard/dashbase.html", segment="budget",
+        return render_template("dashboard/dashbase.html", segment="budget", incomes =current_user.budget.getIncomes(), expenses =current_user.budget.getExpenses(), savings ="", investments =""
                                 )
         
 

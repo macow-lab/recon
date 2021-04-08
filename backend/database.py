@@ -178,14 +178,20 @@ class Database:
         dbConnector = self.__getConnector()
         cursor = self.__getDictionaryCursor()
 
-        foundUser = cursor.execute(
-            "SELECT * FROM user WHERE id = ?", (int(id),)
-        ).fetchone()
+        selectQuery = """
+                            SELECT * FROM user WHERE id = %s
+                        """
+        insertTuple = (id)
+        foundUser = cursor.execute(selectQuery, insertTuple)
         
-        if not foundUser:
-            return None
-        # TODO load budget table
-        founderUser["budget"] = cursor.execute(
-            "SELECT * FROM budget WHERE username = ?", (foundUser.get("username"),)
-        ).fetchone()
+        # if not foundUser:
+        #     return None
+        
+        # # TODO load budget table
+        # selectQuery = """
+        #                     SELECT * FROM budget WHERE username = %s
+        #                 """
+        # insertTuple = (foundUser.get("username"))
+        # founderUser["budget"] = cursor.execute(selectQuery, insertTuple)
+        
         return foundUser

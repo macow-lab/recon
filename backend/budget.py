@@ -7,8 +7,9 @@ budgetBP = Blueprint('budget', __name__,
 
 database = Database()
 
-@login_required
+
 @budgetBP.route('/budget', methods=['GET', 'POST'])
+@login_required
 def index():
     if request.method == "POST":
         if 2 == 2:
@@ -28,7 +29,12 @@ def index():
     
     #PASS DATA TO TEMPLATE
 
-        return render_template("dashboard/dashbase.html", segment="budget", incomes =current_user.budget.getIncomes(), expenses =current_user.budget.getExpenses(), savings ="", investments =""
+        return render_template("dashboard/dashbase.html", 
+                            segment="budget",
+                            incomes = sum(current_user.budget.getIncomes().values()), 
+                            expenses = sum(current_user.budget.getExpenses().values()),
+                            savings ="",
+                            investments =""
                                 )
         
 
@@ -41,6 +47,9 @@ class Budget:
         self.__invested = 0
 
     def getIncomes(self):
+        return self.__incomes
+    
+    def getIncomesValue(self):
         return self.__incomes
 
     def addIncomes(self, incomes: dict):

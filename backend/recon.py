@@ -25,10 +25,17 @@ app.register_blueprint(authBP)
 def load_user(user_id):
     # Load user baseret på id
     try:
-        return User.loadUser(user_id)
+        # TODO LAV LOADER SÅ DET VIRKER OG RETURNERE
+        result = auth.loadHelper(id)
+        
+        user = User(
+            username="esult.get('username')", password="result.get('password')", email="result.get('email')"
+        )
+        #TODO Handle rest of result, load budget ETC.
+        user.budget.updateIncomeExpenses(result.get('budget'))
+        return user
     except:
         return None
-
 
 
 @app.route("/", methods=["GET"])

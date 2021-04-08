@@ -3,7 +3,7 @@ CREATE DATABASE recondb;
 use recondb;
 
 CREATE TABLE user (
-	user_id serial primary key,
+	id serial primary key,
 	username VARCHAR(255) UNIQUE NOT NULL,
 	password VARCHAR(50) NOT NULL,
 	email VARCHAR(255) UNIQUE NOT NULL
@@ -33,9 +33,9 @@ CREATE TABLE networth (
 INSERT INTO user (username, password, email) VALUES ('Sukuna', 'pass', 'admin@recon.com');
 INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 1, "Juju");
 INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 211, "Jujsau");
-INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', -321, "Juasju");
+INSERT INTO budget (username, expenses, categories) VALUES ('Sukuna', -321, "Juasju");
 INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 4421, "Jujus");
 INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 55, "Juju1q");
-INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', -22, "Jujewqeqwu");
+INSERT INTO budget (username, expenses, categories) VALUES ('Sukuna', -22, "Jujewqeqwu");
 
 

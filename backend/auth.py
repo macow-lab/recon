@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required, current_user, LoginManager
 from database import Database
 from user import User
 import re
@@ -7,6 +7,8 @@ import json
 
 db = Database()
 authBP = Blueprint('auth', __name__, url_prefix='/auth', static_folder="static", template_folder="/auth/")
+
+
 
 @authBP.route("/register", methods=["GET", "POST"])
 def register():
@@ -51,10 +53,13 @@ def login():
             flash(fetched)
             return render_template("auth/login.html")
         flash("User found!")
-        newUser = User(username = username, password = password, email = fetched.get("email"))
+        newUser = User(username = username, password = password, email = fetched.get("email"), id = fetched.get("id"))
+        newUser.setID(fetched.get("id"))
+
         login_user(newUser)
+        flash(current_user.get_id())
     
-        return redirect(url_for("budget.index"))
+        return redirect(url_for("index"))
     elif request.method == "GET":
         return render_template("auth/login.html")
 
@@ -63,3 +68,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('recon.index'))
+
+def loadHelper(self, user_id):
+    return db.loadByID(user_id)

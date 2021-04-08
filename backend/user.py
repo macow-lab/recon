@@ -9,8 +9,8 @@ database = Database()
 class User(UserMixin):
 
 
-    def __init__(self, username, password, email):
-        self.__id = None
+    def __init__(self, username, password, email, id):
+        self.__id = id
         self.__username = username
         self.__password = password
         self.__email = email
@@ -30,6 +30,11 @@ class User(UserMixin):
     def setEmail(self, email):
         self.__email = email
         
+    def setID(self, id):
+        self.__id = id
+    
+    def get_id(self):
+        return self.__id
 
     # Main methods
     def createUser(self):
@@ -44,19 +49,3 @@ class User(UserMixin):
         self.budget.updateIncomeExpenses(budget)
         # update db
         return database.updateIncomeExpenses(budget, self.__username)
-    
-    @staticmethod
-    def loadUser(self, id: int):
-        result = database.loadByID(id = id)
-        
-        user = User(
-            username=result.get('username'), password=result.get('password'), email=result.get('email')
-        )
-        user.setID(result.get('id'))
-        
-        #TODO Handle rest of result, load budget ETC.
-        user.budget.updateIncomeExpenses(result.get('budget'))
-        return user
-
-    def get_id(self):
-        return self.__id

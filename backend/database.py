@@ -39,9 +39,9 @@ class Database:
 # CRUD Operations
 
     def createUser(self, username, password, email):  # COMPLETE AND WORKS
-        dbConnector = self.__getConnector()
-        cursor = self.__getPreparedCursor()
         try:
+            dbConnector = self.__getConnector()
+            cursor = self.__getDictionaryCursor()
             insertQuery = """
                             INSERT INTO user (
                                 username,
@@ -63,42 +63,55 @@ class Database:
                 dbConnector.close()
 
     def ifCategoryExists(self, category: str, username: str):
-        dbConnector = self.__getConnector()
-        cursor = self.__getDictionaryCursor()
+        try:
+            dbConnector = self.__getConnector()
+            cursor = self.__getDictionaryCursor()
+            cursor.execute(
+                """
+                        SELECT EXISTS(SELECT * FROM budget WHERE username= '{}' AND categories='{}');
+                        """.format(username, category)
+            )
+            search = cursor.fetchone()
+            cursor.close()
+            result = search.values()
+            return result
+        except mysql.connector.IntegrityError as err:
+            return False
+        finally:
+            if dbConnector.is_connected:
+                cursor.close()
+                dbConnector.close()
 
-        cursor.execute(
-            """
-                    SELECT EXISTS(SELECT * FROM budget WHERE username= '{}' AND categories='{}');
-                    """.format(username, category)
-        )
-        search = cursor.fetchone()
-        cursor.close()
-        result = search.values()
-        return result
     
     def ifUserExists(self, username: str):
-        dbConnector = self.__getConnector()
-        cursor = self.__getDictionaryCursor()
-
-        cursor.execute(
-            """
-                    SELECT * FROM user WHERE username= '{}';
-                    """.format(username)
-        )
-        search = cursor.fetchone()
-        
-        if search == None:
+        try:
+            dbConnector = self.__getConnector()
+            cursor = self.__getDictionaryCursor()
+            cursor.execute(
+                """
+                        SELECT * FROM user WHERE username= '{}';
+                        """.format(username)
+            )
+            search = cursor.fetchone()
+            
+            if search == None:
+                return False
+            
+            cursor.close()
+            return search
+        except mysql.connector.IntegrityError as err:
             return False
-        
-        cursor.close()
-        return search
+        finally:
+            if dbConnector.is_connected:
+                cursor.close()
+                dbConnector.close()
 
     def updateIncomeExpenses(self, budget: dict, username: str):
         # Example for insert in database
-        dbConnector = self.__getConnector()
-        cursor = self.__getPreparedCursor()
 
         try:  # Set wether expense or income, and check if key already exists.
+            dbConnector = self.__getConnector()
+            cursor = self.__getDictionaryCursor()
             for item in budget.items():
                 key = item[0]
                 value = item[1]
@@ -109,7 +122,6 @@ class Database:
                     dice = "expenses"
 
                 search = self.ifCategoryExists(key, username)
-                cursor = self.__getPreparedCursor()
                 
                 if 1 in search:
                     updateQuery = None                   
@@ -177,21 +189,30 @@ class Database:
         """
         dbConnector = self.__getConnector()
         cursor = self.__getDictionaryCursor()
-
-        selectQuery = """
-                            SELECT * FROM user WHERE id = %s
-                        """
-        insertTuple = (id)
-        foundUser = cursor.execute(selectQuery, insertTuple)
-        
-        # if not foundUser:
-        #     return None
-        
-        # # TODO load budget table
-        # selectQuery = """
-        #                     SELECT * FROM budget WHERE username = %s
-        #                 """
-        # insertTuple = (foundUser.get("username"))
-        # founderUser["budget"] = cursor.execute(selectQuery, insertTuple)
-        
-        return foundUser
+        try:
+            
+            selectQuery = """SELECT * FROM user where id = %s"""
+            
+            cursor.execute(selectQuery, (id, ))
+            
+            foundUser = cursor.fetchone()
+            # TODO load budget table
+            selectQuery = """
+                                SELECT * FROM budget WHERE username = %s
+                            """
+            insertTuple = foundUser.get("username")
+            
+            cursor.execute(selectQuery, (insertTuple, ))
+            foundUser["budget"] = cursor.fetchall()
+            
+            return foundUser
+        except mysql.connector.IntegrityError as err:
+            rejectedInsert = {
+                "Error": err,
+                "Status": False
+            }
+            return rejectedInsert
+        finally:
+            if dbConnector.is_connected:
+                cursor.close()
+                dbConnector.close()

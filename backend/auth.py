@@ -53,10 +53,11 @@ def login():
             flash(fetched)
             return render_template("auth/login.html")
         flash("User found!")
-        newUser = User(username = username, password = password, email = fetched.get("email"))
+        newUser = User(username = username, password = password, email = fetched.get("email"), id = fetched.get("id"))
         newUser.setID(fetched.get("id"))
 
         login_user(newUser)
+        flash(current_user.get_id())
     
         return redirect(url_for("index"))
     elif request.method == "GET":
@@ -68,5 +69,5 @@ def logout():
     logout_user()
     return redirect(url_for('recon.index'))
 
-def loadHelper(self, id):
-    return db.loadByID(id)
+def loadHelper(self, user_id):
+    return db.loadByID(user_id)

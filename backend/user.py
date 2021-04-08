@@ -9,8 +9,8 @@ database = Database()
 class User(UserMixin):
 
 
-    def __init__(self, username, password, email):
-        self.__id = None
+    def __init__(self, username, password, email, id):
+        self.__id = id
         self.__username = username
         self.__password = password
         self.__email = email

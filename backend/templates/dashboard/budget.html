@@ -7,13 +7,13 @@
 <div class="tile is-ancestor">
     <div class="tile is-parent">
         <article class="tile is-child box notification is-success">
-            <p class="title">{{ incomes }}</p>
+            <p class="title">{{ incomes | currencyFormat }}</p>
             <p class="subtitle">Incomes</p>
         </article>
     </div>
     <div class="tile is-parent">
         <article class="tile is-child box notification is-danger">
-            <p class="title">{{ expenses }}</p>
+            <p class="title">{{ expenses | currencyFormat }}</p>
             <p class="subtitle">Expenses</p>
         </article>
     </div>
@@ -22,13 +22,13 @@
 <div class="tile is-ancestor">
     <div class="tile is-parent ">
         <article class="tile is-child box ">
-            <p class="title">329</p>
-            <p class="subtitle">Invested</p>
+            <p class="title">{{ investments | currencyFormat }}</p>
+            <p class="subtitle">investments</p>
         </article>
     </div>
     <div class="tile is-parent">
         <article class="tile is-child box">
-            <p class="title">+20 %</p>
+            <p class="title">+{{ savings }}%</p>
             <p class="subtitle">Saved</p>
         </article>
     </div>

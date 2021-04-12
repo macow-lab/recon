@@ -26,29 +26,29 @@ def index():
             return ('Failed to update', 400)
     elif request.method == "GET":
     #PASS DATA TO TEMPLATE
-        incomes = current_user.budget.getIncomesValue()
         return render_template("dashboard/dashbase.html", 
                             segment="budget",
-                            incomes = current_user.budget.getIncomesValue(), 
-                            expenses = current_user.budget.getExpenesValue(),
-                            savings =current_user.budget.getSavings(),
-                            investments =current_user.budget.getInvested()
-                                )
+                            incomes = current_user.budget.getIncomesSummary(), 
+                            expenses = current_user.budget.getExpenesSummary(),
+                            savings = current_user.budget.getSavingsSummary(),
+                            investments = current_user.budget.getInvestmentsSummary(),
+                            )
         
 
 
 class Budget:
     def __init__(self):
-        self.__incomes = {}
-        self.__expenses = {}
-        self.__savings = 0
-        self.__invested = 0
+        self.__incomes = {"summary": 0}
+        self.__expenses = {"summary": 0}
+        self.__savings = {"summary": 0}
+        self.__investments = {"summary": 0}
 
     def getIncomes(self):
         return self.__incomes
-    
-    def getIncomesValue(self):
-        return sum(self.__incomes.values())
+
+    def getIncomesSummary(self):
+            # TODO Loop over Dicts i Incomes, sum af values for "incomes" key
+        return self.__incomes["summary"]
 
     def addIncomes(self, incomes: dict):
         for key, value in incomes.items():
@@ -58,8 +58,8 @@ class Budget:
     def getExpenses(self):
         return self.__expenses
     
-    def getExpenesValue(self):
-        return sum(self.__expenses.values())
+    def getExpenesSummary(self):
+        return self.__expenses["summary"]
 
     def addExpenses(self, expenses: dict):
         for key, value in expenses.items():
@@ -69,16 +69,14 @@ class Budget:
     def getSavings(self):
         return self.__savings
 
-    def setSavings(self, savings: dict):
-        self.__savings = savings
-        return self.__savings
+    def getSavingsSummary(self):
+        return self.__savings["summary"]
 
     def getInvested(self):
-        return self.__invested
+        return self.__investments
 
-    def setInvest(self, invested: dict):
-        self.__invested = invested
-        return self.__invested
+    def getInvestmentsSummary(self):
+        return self.__savings["summary"]
 
     def getAll(self):
         combined = {**self.__incomes, **self.__expenses}
@@ -99,6 +97,25 @@ class Budget:
                 flash("Current Key: %s Value: %s" % (key, item.get(key)))
                 if item.get(key) is None:
                     del item[key]
+                    
+            if item.get("incomes"):
+                flash("Current Key: %s Value: %s | ADDED TO INCOMES" % (key, item.get(key)))
+                self.__incomes[item.get("id")] = item
+                self.__incomes["summary"] += item.get("incomes")
+            elif item.get("expenses"):
+                flash("Current Key: %s Value: %s | ADDED TO EXPENSES" % (key, item.get(key)))
+                self.__expenses[item.get("id")] = item
+                self.__expenses["summary"] -= item.get("expenses")
+            elif item.get("savings"):
+                flash("Current Key: %s Value: %s | ADDED TO SAVINGS" % (key, item.get(key)))
+                self.__savings[item.get("id")] = item
+                self.__savings["summary"] += item.get("savings")
+            elif item.get("investments"):
+                flash("Current Key: %s Value: %s | ADDED TO SAVINGS" % (key, item.get(key)))
+                self.__investments[item.get("id")] = item
+                self.__investments["summary"] -= item.get("investments")
+
+            # TODO Expand T
             flash("POST UPDATE: ")
             flash(item)
 

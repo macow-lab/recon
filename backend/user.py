@@ -46,6 +46,5 @@ class User(UserMixin):
             Parameter:
             budget (dict): A dictionary of incomes and expenses.
         '''
-        self.budget.updateIncomeExpenses(budget)
         # update db
         return database.updateIncomeExpenses(budget, self.__username)

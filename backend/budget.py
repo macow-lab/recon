@@ -27,8 +27,6 @@ def index():
     elif request.method == "GET":
     #PASS DATA TO TEMPLATE
         incomes = current_user.budget.getIncomesValue()
-        list = []
-        list.get("")
         return render_template("dashboard/dashbase.html", 
                             segment="budget",
                             incomes = current_user.budget.getIncomesValue(), 
@@ -86,20 +84,24 @@ class Budget:
         combined = {**self.__incomes, **self.__expenses}
         return combined
 
-    def updateIncomeExpenses(self, incomingUpdate: list): 
+    def updateIncomeExpenses(self, incomingUpdate: dict): 
         '''
         The list of dicts are iterated over, and dicts are added to their respective lists.
             Parameter:
             incomingUpdate (list): A list of dictionaries with entries that are either incomes or expenses
         '''
+        flash("INCOMING UPDATE")
+        flash(incomingUpdate)
         for item in incomingUpdate:
-            for key, value in item.items(): # TODO For hver KV
-                if value is None:
+            flash("current Dict")
+            flash(item)
+            for key in list(item): # TODO For hver KV
+                flash("Current Key: %s Value: %s" % (key, item.get(key)))
+                if item.get(key) is None:
                     del item[key]
-                    
-                if value < 0 and key is "incomes":
-                    self.__expenses[key] = json.dumps(value, use_decimal=True)
-                elif value > 0 and key is "expenses":
-                    self.__incomes[key] = json.dumps(value, use_decimal=True)
+            flash("POST UPDATE: ")
+            flash(item)
+
+                
         return self.getAll()
             

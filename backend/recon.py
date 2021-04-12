@@ -39,6 +39,7 @@ def load_user(user_id):
         )
         #TODO Handle rest of result, load budget ETC.
         user.budget.updateIncomeExpenses(result.get('budgetIE'))
+
         return user
     except:
         return user
@@ -46,7 +47,7 @@ def load_user(user_id):
 
 @app.route("/", methods=["GET"])
 def index():
-    flash(load_user(current_user))
+    flash(load_user(1))
     return render_template("index.html")
 
 

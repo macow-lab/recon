@@ -206,7 +206,6 @@ class Database:
 
             budget = cursor.fetchall()
             foundUser['budgetIE'] = []
-            foundUser['bugs'] = []
             for item in budget:
                 incomeExpense = False
                 investments = False
@@ -226,9 +225,8 @@ class Database:
                 elif investments:
                     foundUser['investments'] = item.get("investments")
                 elif savings:
-                    foundUser['savings'] = item.get("savings")
+                    foundUser['savings'] = item.get("savings")    
 
-            
             #TODO Handle rest of user loading
             
             return foundUser

@@ -76,7 +76,7 @@ class Budget:
         return self.__investments
 
     def getInvestmentsSummary(self):
-        return self.__savings["summary"]
+        return self.__investments["summary"]
 
     def getAll(self):
         combined = {**self.__incomes, **self.__expenses}
@@ -88,36 +88,30 @@ class Budget:
             Parameter:
             incomingUpdate (list): A list of dictionaries with entries that are either incomes or expenses
         '''
-        flash("INCOMING UPDATE")
         flash(incomingUpdate)
         for item in incomingUpdate:
-            flash("current Dict")
-            flash(item)
             for key in list(item): # TODO For hver KV
-                flash("Current Key: %s Value: %s" % (key, item.get(key)))
                 if item.get(key) is None:
                     del item[key]
                     
             if item.get("incomes"):
-                flash("Current Key: %s Value: %s | ADDED TO INCOMES" % (key, item.get(key)))
                 self.__incomes[item.get("id")] = item
                 self.__incomes["summary"] += item.get("incomes")
             elif item.get("expenses"):
-                flash("Current Key: %s Value: %s | ADDED TO EXPENSES" % (key, item.get(key)))
                 self.__expenses[item.get("id")] = item
                 self.__expenses["summary"] -= item.get("expenses")
             elif item.get("savings"):
-                flash("Current Key: %s Value: %s | ADDED TO SAVINGS" % (key, item.get(key)))
                 self.__savings[item.get("id")] = item
                 self.__savings["summary"] += item.get("savings")
             elif item.get("investments"):
-                flash("Current Key: %s Value: %s | ADDED TO SAVINGS" % (key, item.get(key)))
                 self.__investments[item.get("id")] = item
-                self.__investments["summary"] -= item.get("investments")
+                self.__investments["summary"] += item.get("investments")
+        flash(self.__incomes)
+        flash(self.__investments)
+        flash(self.__savings)
 
             # TODO Expand T
-            flash("POST UPDATE: ")
-            flash(item)
+
 
                 
         return self.getAll()

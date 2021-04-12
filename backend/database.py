@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import cursor
-import json
+import simplejson as json
 
 
 class Database:
@@ -203,7 +203,33 @@ class Database:
             insertTuple = foundUser.get("username")
             
             cursor.execute(selectQuery, (insertTuple, ))
-            foundUser["budget"] = cursor.fetchall()
+
+            budget = cursor.fetchall()
+            foundUser['budgetIE'] = []
+            foundUser['bugs'] = []
+            for item in budget:
+                incomeExpense = False
+                investments = False
+                savings = False
+                
+                if item.get("incomes") is not None: 
+                    incomeExpense = True
+                elif item.get("expenses") is not None:
+                    incomeExpense = True
+                elif item.get("investments") is not None:
+                    investments = True
+                elif item.get("savings") is not None:
+                    savings = True
+
+                if incomeExpense:
+                    foundUser['budgetIE'].append(item)
+                elif investments:
+                    foundUser['investments'] = item.get("investments")
+                elif savings:
+                    foundUser['savings'] = item.get("savings")
+
+            
+            #TODO Handle rest of user loading
             
             return foundUser
         except mysql.connector.IntegrityError as err:

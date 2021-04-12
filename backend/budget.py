@@ -1,6 +1,8 @@
-from flask import Flask, request, render_template, Response, Blueprint
+from flask import Flask, request, render_template, Response, Blueprint, flash
 from flask_login import login_required, current_user
 from database import Database
+import simplejson as json
+import decimal
 
 budgetBP = Blueprint('budget', __name__,
                     url_prefix='/dash', static_folder="static")
@@ -23,18 +25,16 @@ def index():
         else:
             return ('Failed to update', 400)
     elif request.method == "GET":
-    # GET DATA FROM DATABASE
-    
-    # LOAD DATA INTO USER OBJECT
-    
     #PASS DATA TO TEMPLATE
-
+        incomes = current_user.budget.getIncomesValue()
+        list = []
+        list.get("")
         return render_template("dashboard/dashbase.html", 
                             segment="budget",
-                            incomes = sum(current_user.budget.getIncomes().values()), 
-                            expenses = sum(current_user.budget.getExpenses().values()),
-                            savings ="",
-                            investments =""
+                            incomes = current_user.budget.getIncomesValue(), 
+                            expenses = current_user.budget.getExpenesValue(),
+                            savings =current_user.budget.getSavings(),
+                            investments =current_user.budget.getInvested()
                                 )
         
 
@@ -50,7 +50,7 @@ class Budget:
         return self.__incomes
     
     def getIncomesValue(self):
-        return self.__incomes
+        return sum(self.__incomes.values())
 
     def addIncomes(self, incomes: dict):
         for key, value in incomes.items():
@@ -59,6 +59,9 @@ class Budget:
 
     def getExpenses(self):
         return self.__expenses
+    
+    def getExpenesValue(self):
+        return sum(self.__expenses.values())
 
     def addExpenses(self, expenses: dict):
         for key, value in expenses.items():
@@ -83,15 +86,20 @@ class Budget:
         combined = {**self.__incomes, **self.__expenses}
         return combined
 
-    def updateIncomeExpenses(self, incomingUpdate: dict):
-
-        for item in incomingUpdate.items():
-            key = item[0]
-            value = item[1]
-            if not isinstance(value, (int, float, complex)):
-                print("Value for ", key, " is not a number.")
-            elif value < 0:
-                self.__expenses[key] = value
-            elif value > 0:
-                self.__incomes[key] = value
+    def updateIncomeExpenses(self, incomingUpdate: list): 
+        '''
+        The list of dicts are iterated over, and dicts are added to their respective lists.
+            Parameter:
+            incomingUpdate (list): A list of dictionaries with entries that are either incomes or expenses
+        '''
+        for item in incomingUpdate:
+            for key, value in item.items(): # TODO For hver KV
+                if value is None:
+                    del item[key]
+                    
+                if value < 0 and key is "incomes":
+                    self.__expenses[key] = json.dumps(value, use_decimal=True)
+                elif value > 0 and key is "expenses":
+                    self.__incomes[key] = json.dumps(value, use_decimal=True)
         return self.getAll()
+            

@@ -22,6 +22,10 @@ db = Database()
 app.register_blueprint(budgetBP)
 app.register_blueprint(authBP)
 
+@app.template_filter()
+def currencyFormat(value):
+    value = float(value)
+    return "{:,.2f} kr".format(value)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -34,7 +38,7 @@ def load_user(user_id):
             username=result.get('username'), password=result.get('password'), email=result.get('email'), id = result.get('id')
         )
         #TODO Handle rest of result, load budget ETC.
-        user.budget.updateIncomeExpenses(result.get('budget'))
+        user.budget.updateIncomeExpenses(result.get('budgetIE'))
         return user
     except:
         return user
@@ -42,7 +46,7 @@ def load_user(user_id):
 
 @app.route("/", methods=["GET"])
 def index():
-    flash(load_user(1))
+    flash(load_user(current_user))
     return render_template("index.html")
 
 

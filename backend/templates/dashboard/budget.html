@@ -1,3 +1,9 @@
+<head>
+    <title>{% block title %}Budget{% endblock title %}</title>
+</head>
+<div class="container is-fluid">
+
+    <p class ="is-size 1">Budget</p>
 <div>
     <small>Keep track of your budget and see where everything is going!</small>
 </div>
@@ -28,8 +34,57 @@
     </div>
     <div class="tile is-parent">
         <article class="tile is-child box">
-            <p class="title">{{ savings }}%</p>
+            <p class="title">{{ savings | currencyFormat }}</p>
             <p class="subtitle">Saved</p>
         </article>
     </div>
 </div>
+
+<table class="table is-fullwidth">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Category</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for item in tableData %}
+        <tr>
+            <td>{{item.id}}</TD>
+            {% if item.get("incomes") %}
+            <td>{{item.incomes | currencyFormat }}</TD>
+            <td>Incomes</TD>
+            <td>{{item.categories}}</TD>
+            {% elif item.get("expenses") %}
+            <td>{{item.expenses | currencyFormat }}</TD>
+            <td>Expenses</TD>
+            <td>{{item.categories}}</TD>
+            {% elif item.get("investments") %}
+            <td>{{item.investments | currencyFormat }}</TD>
+            <td>Investments</TD>
+            <td>{{item.categories}}</TD>
+            {% elif item.get("savings") %}
+            <td>{{item.savings | currencyFormat }}</TD>
+            <td>Savings</TD>
+            <td>{{item.categories}}</TD>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('budget.edit')}}"><button class="button is-widescreen is-info">Edit your budget</button></a>
+</div>
+<script>
+    console.log("HOW DOW MOW WAELA ERI")
+</script>

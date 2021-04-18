@@ -2,14 +2,18 @@
 
 
 {% block content %}
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+</head>
 <div class="wrapper">
 {% include 'common/navbar.html' %}
     <div class="columns">
         {% include 'common/menu.html' %}
       <main class="column">
-      {% if 'budget' in segment %}
-        {% block title %} Budget {% endblock title %}
+      {% if segment == 'budget' %}
         {% include 'dashboard/budget.html' %}
+      {% elif segment == 'budgetEdit'%}
+        {% include 'dashboard/budgetpost.html' %}
       {% endif %}
       </main>
       </div>

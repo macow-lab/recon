@@ -205,27 +205,11 @@ class Database:
             cursor.execute(selectQuery, (insertTuple, ))
 
             budget = cursor.fetchall()
-            foundUser['budgetIE'] = []
+            foundUser['budget'] = []
+            foundUser['investments'] = []
+            foundUser['savings'] = []
             for item in budget:
-                incomeExpense = False
-                investments = False
-                savings = False
-                
-                if item.get("incomes") is not None: 
-                    incomeExpense = True
-                elif item.get("expenses") is not None:
-                    incomeExpense = True
-                elif item.get("investments") is not None:
-                    investments = True
-                elif item.get("savings") is not None:
-                    savings = True
-
-                if incomeExpense:
-                    foundUser['budgetIE'].append(item)
-                elif investments:
-                    foundUser['investments'] = item.get("investments")
-                elif savings:
-                    foundUser['savings'] = item.get("savings")    
+                foundUser['budget'].append(item)  
 
             #TODO Handle rest of user loading
             

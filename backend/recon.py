@@ -33,12 +33,11 @@ def load_user(user_id):
     try:
         # TODO LAV LOADER SÅ DET VIRKER OG RETURNERE
         result = db.loadByID(user_id)
-        flash("RESULT BIG MAN!")
         user = User(
             username=result.get('username'), password=result.get('password'), email=result.get('email'), id = result.get('id')
         )
         #TODO Handle rest of result, load budget ETC.
-        user.budget.updateIncomeExpenses(result.get('budgetIE'))
+        user.budget.updateIncomeExpenses(result.get('budget'))
 
         return user
     except:

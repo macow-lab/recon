@@ -6,7 +6,7 @@
     <form action="/dash/budget/edit" class="form" id ="budgetform" name ="budgetform" method="post">
     {% for item in tableData %}
     
-        <div class="columns">
+        <div class="columns budget-columns">
             <div class="column">
                 <label for="id"><b>ID</b></label>
                 <input class="input is-info" type="text" id="id" value={{ item.get("id") }} readonly>
@@ -89,7 +89,7 @@
 
     <div class="columns">
         <div class="column">
-            <button class="button is-fullwidth is-primary">Save</button>
+            <button class="button is-fullwidth is-primary post-budget" type ="button" onclick="postBudget()">Save budget</button>
         </div>
     </div>
     
@@ -99,7 +99,7 @@
             <button class="button is-fullwidth is-info" id ="addRowButton" onclick ="addRow()">Add another field</button>
         </div>
         <div class="column">
-            <a href="{{ url_for('budget.index')}}"><button class="button is-fullwidth is-danger">Cancel</button></a>
+            <a href="{{ url_for('budget.index')}}"><button class="button is-fullwidth is-danger">Cancel changes</button></a>
         </div>
 
     </div>

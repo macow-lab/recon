@@ -21,10 +21,17 @@ function addRow() {
                         '</div>\n ' +
                         '<div class="column">\n' +
                         '<label for="category"><b>Delete Row</b></label>\n' +
-                        '<button class="button is-fullwidth is-danger">Delete</button>\n' +
+                        '<button class="button is-fullwidth is-danger delete-row" type="button" onclick="deleteRow()">Delete</button>\n' +
                         '</div>\n' +
                         '</div>\n';
                 
     // Slet nearest columns
                     }
 
+function deleteRow() {
+    $(document).on('click', '.delete-row', function(e) {
+        e.preventDefault();
+        $(this).closest('.columns').remove();
+        return false;
+     });
+}

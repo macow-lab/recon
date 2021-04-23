@@ -1,9 +1,9 @@
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
-    <script src="js/budgetPost.js"></script>
+    
+    <script src="{{url_for('static', filename='js/budgetPost.js')}}"></script>
 </head>
 <div class="container is-fluid">
-    <form action="/dash/budget/edit" class="form" method="post">
+    <form action="/dash/budget/edit" class="form" id ="budgetform" name ="budgetform" method="post">
     {% for item in tableData %}
     
         <div class="columns">
@@ -73,7 +73,11 @@
                 </select>
             </div>
             {% endif %}
-
+            <div class="column">
+                <label for="category"><b>Category</b></label>
+                <input class="input" type="text" id="category" placeholder="Enter category for item" value={{
+                    item.get("categories") }} required>
+            </div>
             <div class="column">
                 <label for="category"><b>Category</b></label>
                 <input class="input" type="text" id="category" placeholder="Enter category for item" value={{
@@ -81,17 +85,18 @@
             </div>
         </div>
         {% endfor %}
-        <div class="columns">
-            <div class="column">
-                <button class="button is-fullwidth is-primary">Save</button>
-            </div>
-        </div>
     </form>
+
+    <div class="columns">
+        <div class="column">
+            <button class="button is-fullwidth is-primary">Save</button>
+        </div>
+    </div>
     
     
     <div class="columns">
         <div class="column">
-            <button class="button is-fullwidth is-info">Add another field</button>
+            <button class="button is-fullwidth is-info" id ="addRowButton" onclick ="addRow()">Add another field</button>
         </div>
         <div class="column">
             <a href="{{ url_for('budget.index')}}"><button class="button is-fullwidth is-danger">Cancel</button></a>

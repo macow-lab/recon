@@ -7,14 +7,11 @@
     {% for item in tableData %}
     
         <div class="columns budget-columns">
-            <div class="column">
-                <label for="id"><b>ID</b></label>
-                <input class="input is-info" type="text" id="id" value={{ item.get("id") }} readonly>
-            </div>
+                <input type="hidden" name="id" value={{ item.get("id") }} readonly>
             {% if item.get("incomes") %}
             <div class="column">
                 <label for="incomes"><b>Incomes</b></label>
-                <input class="input" type="number" pattern="(0\,((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\,([0-9]{1,2}))?)" title="Only positive numbers, with comma (,) as a delimiter" id="amount" value={{ item.get("incomes") }} placeholder="Enter amount"
+                <input class="input amount" type="number" pattern="/^[0-9]*(\.[0-9]{0,2})?$/" title="Only positive numbers, with period (.) as a delimiter. Example: 100 or 100.25" id="amount" value={{ item.get("incomes") }} placeholder="Enter amount"
                     required>
             </div>
 
@@ -30,7 +27,7 @@
             {% elif item.get("expenses") %}
             <div class="column">
                 <label for="expenses"><b>Expenses</b></label>
-                <input class="input" type="number" pattern="(0\,((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\,([0-9]{1,2}))?)" title="Only positive numbers, with comma (,) as a delimiter" id="expenses" value={{ item.get("expenses") }}
+                <input class="input amount" type="number" pattern="/^[0-9]*(\.[0-9]{0,2})?$/" title="Only positive numbers, with period (.) as a delimiter. Example: 100 or 100.25" id="expenses" value={{ item.get("expenses") }}
                     placeholder="Enter amount" required>
             </div>
             <div class="column select is-fullwidth">
@@ -45,7 +42,7 @@
             {% elif item.get("investments") %}
             <div class="column">
                 <label for="Investments"><b>Investments</b></label>
-                <input class="input" type="number" pattern="(0\,((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\,([0-9]{1,2}))?)" title="Only positive numbers, with comma (,) as a delimiter" value={{ item.get("investments") }} placeholder="Enter amount"
+                <input class="input amount" type="number" pattern="/^[0-9]*(\.[0-9]{0,2})?$/" title="Only positive numbers, with period (.) as a delimiter. Example: 100 or 100.25" value={{ item.get("investments") }} placeholder="Enter amount"
                     required>
             </div>
             <div class="column select is-fullwidth">
@@ -60,7 +57,7 @@
             {% elif item.get("savings") %}
             <div class="column">
                 <label for="savings"><b>Savings</b></label>
-                <input class="input" type="number" pattern="(0\,((0[1-9]{1})|([1-9]{1}([0-9]{1})?)))|(([1-9]+[0-9]*)(\,([0-9]{1,2}))?)" title="Only positive numbers, with comma (,) as a delimiter" id="savings" value={{ item.get("savings") }} placeholder="Enter amount"
+                <input class="input amount" type="number" pattern="/^[0-9]*(\.[0-9]{0,2})?$/" title="Only positive numbers, with period (.) as a delimiter. Example: 100 or 100.25" id="savings" value={{ item.get("savings") }} placeholder="Enter amount"
                     required>
             </div>
             <div class="column select is-fullwidth">
@@ -75,12 +72,7 @@
             {% endif %}
             <div class="column">
                 <label for="category"><b>Category</b></label>
-                <input class="input" type="text" id="category" placeholder="Enter category for item" value={{
-                    item.get("categories") }} required>
-            </div>
-            <div class="column">
-                <label for="category"><b>Category</b></label>
-                <input class="input" type="text" id="category" placeholder="Enter category for item" value={{
+                <input class="input category" type="text" id="category" placeholder="Enter category for item" value={{
                     item.get("categories") }} required>
             </div>
         </div>

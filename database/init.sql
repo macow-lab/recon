@@ -37,7 +37,7 @@ INSERT INTO budget (username, expenses, categories) VALUES ('Sukuna', 321, "Juas
 INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 4421, "Jujus");
 INSERT INTO budget (username, incomes, categories) VALUES ('Sukuna', 55, "Juju1q");
 INSERT INTO budget (username, expenses, categories) VALUES ('Sukuna', 22, "Bombaclaat");
-INSERT INTO budget (username, investments, categories) VALUES ('Sukuna', 35000, "Rastaclaat");
+INSERT INTO budget (username, investments, categories) VALUES ('Sukuna', 35000.25, "Rastaclaat");
 INSERT INTO budget (username, savings, categories) VALUES ('Sukuna', 9989, "OhDemDem");
 
 

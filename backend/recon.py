@@ -24,14 +24,15 @@ app.register_blueprint(authBP)
 
 @app.template_filter()
 def currencyFormat(value):
-    value = float(value)
-    return "{:,.2f} kr".format(value)
+    if value % 1 != 0:
+        value = float(value)
+        return value
+    return "{} kr".format(value)
 
 @login_manager.user_loader
 def load_user(user_id):
     # Load user baseret på id
     try:
-        # TODO LAV LOADER SÅ DET VIRKER OG RETURNERE
         result = db.loadByID(user_id)
         user = User(
             username=result.get('username'), password=result.get('password'), email=result.get('email'), id = result.get('id')
@@ -46,7 +47,6 @@ def load_user(user_id):
 
 @app.route("/", methods=["GET"])
 def index():
-    flash(load_user(1))
     return render_template("index.html")
 
 
